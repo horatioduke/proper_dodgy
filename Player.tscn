@@ -1,0 +1,79 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_000.png" type="Texture" id=2]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_004.png" type="Texture" id=3]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_010.png" type="Texture" id=4]
+[ext_resource path="res://Player.gd" type="Script" id=5]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_003.png" type="Texture" id=6]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_009.png" type="Texture" id=7]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_001.png" type="Texture" id=8]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_005.png" type="Texture" id=9]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_006.png" type="Texture" id=10]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_007.png" type="Texture" id=11]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_008.png" type="Texture" id=12]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_002.png" type="Texture" id=13]
+[ext_resource path="res://dodge_assets/art/player_sprites/Wraith_01_Moving Forward_011.png" type="Texture" id=14]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 8 ), ExtResource( 13 ), ExtResource( 6 ), ExtResource( 3 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 7 ), ExtResource( 4 ), ExtResource( 14 ) ],
+"loop": true,
+"name": "right",
+"speed": 24.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 8 ), ExtResource( 13 ), ExtResource( 6 ), ExtResource( 3 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 7 ), ExtResource( 4 ), ExtResource( 14 ) ],
+"loop": true,
+"name": "up",
+"speed": 24.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 26.9895
+height = 15.3078
+
+[sub_resource type="Gradient" id=3]
+colors = PoolColorArray( 1, 1, 1, 0.760784, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=4]
+gradient = SubResource( 3 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0.446236 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.0735091 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 0.25
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 4 )
+
+[node name="Player" type="Area2D"]
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
+speed = 400
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.25, 0.25 )
+frames = SubResource( 1 )
+animation = "up"
+frame = 10
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+
+[node name="Trail" type="Particles2D" parent="."]
+show_behind_parent = true
+amount = 10
+speed_scale = 2.0
+local_coords = false
+process_material = SubResource( 7 )
+texture = ExtResource( 2 )
+[connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
